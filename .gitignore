@@ -1,0 +1,12 @@
+.idea/
+*.iml
+target/
+**/*.iml
+**/.mvn/
+**/mvnw
+**/mvnw.cmd
+**/*.log
+logs/
+**/.DS_Store
+tmp/
+/res/

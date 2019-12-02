@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -87,6 +84,33 @@ public class RaftNode {
         lastAppliedIndex = commitIndex;
     }
 
+    public void init() {
+        for (StoreProto.Server server: configuration.getServersList()) {
+            if (!peerMap.contains(server.getServerId()) && server.getServerId() != localServer.getServerId()) {
+                RaftPeer peer = new RaftPeer(server);
+                peer.setNextIndex(raftLog.getLastLogIndex() + 1);
+                peerMap.put(server.getServerId(), peer);
+            }
+        }
+        executorService = new ThreadPoolExecutor(
+                raftOptions.getRaftConsensusThreadNum(),
+                raftOptions.getRaftConsensusThreadNum(),
+                60,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>());
+        scheduledExecutorService = Executors.newScheduledThreadPool(2);
+        scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                takeSnapshot();
+            }
+        }, raftOptions.getSnapshotPeriodSeconds(), raftOptions.getSnapshotPeriodSeconds(), TimeUnit.SECONDS);
+
+    }
+
+    public void takeSnapshot() {
+//        snapshot
+    }
     public void applyConfiguration(StoreProto.LogEntry entry) {
         try {
             StoreProto.Configuration newConfiguration
