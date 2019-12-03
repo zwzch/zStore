@@ -277,4 +277,12 @@ public class SegmentLog {
         Segment segment = startLogIndexSegmentMap.floorEntry(index).getValue();
         return segment.getEntry(index);
     }
+
+    public long getEntryTerm(long index) {
+        StoreProto.LogEntry entry = getEntry(index);
+        if (entry == null) {
+            return 0;
+        }
+        return entry.getTerm();
+    }
 }

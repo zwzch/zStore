@@ -1,4 +1,4 @@
-package com.zstore.consensus.raft;
+package com.zstore.consensus.raft.constants;
 
 import lombok.Getter;
 import lombok.Setter;
