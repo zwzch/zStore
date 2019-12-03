@@ -1,4 +1,4 @@
-package com.zstore.consensus.raft;
+package com.zstore.consensus.raft.constants;
 
 public enum RaftNodeState {
     STATE_FOLLOWER,
