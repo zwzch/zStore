@@ -15,6 +15,105 @@ public final class StoreProto {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   /**
+   * Protobuf enum {@code raft.ResCode}
+   */
+  public enum ResCode
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>RES_CODE_SUCCESS = 0;</code>
+     */
+    RES_CODE_SUCCESS(0),
+    /**
+     * <code>RES_CODE_FAIL = 1;</code>
+     */
+    RES_CODE_FAIL(1),
+    /**
+     * <code>RES_CODE_NOT_LEADER = 2;</code>
+     */
+    RES_CODE_NOT_LEADER(2),
+    ;
+
+    /**
+     * <code>RES_CODE_SUCCESS = 0;</code>
+     */
+    public static final int RES_CODE_SUCCESS_VALUE = 0;
+    /**
+     * <code>RES_CODE_FAIL = 1;</code>
+     */
+    public static final int RES_CODE_FAIL_VALUE = 1;
+    /**
+     * <code>RES_CODE_NOT_LEADER = 2;</code>
+     */
+    public static final int RES_CODE_NOT_LEADER_VALUE = 2;
+
+
+    public final int getNumber() {
+      return value;
+    }
+
+    /**
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ResCode valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static ResCode forNumber(int value) {
+      switch (value) {
+        case 0: return RES_CODE_SUCCESS;
+        case 1: return RES_CODE_FAIL;
+        case 2: return RES_CODE_NOT_LEADER;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ResCode>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        ResCode> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ResCode>() {
+            public ResCode findValueByNumber(int number) {
+              return ResCode.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return com.zstore.consensus.raft.proto.StoreProto.getDescriptor().getEnumTypes().get(0);
+    }
+
+    private static final ResCode[] VALUES = values();
+
+    public static ResCode valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private ResCode(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:raft.ResCode)
+  }
+
+  /**
    * Protobuf enum {@code raft.LogType}
    */
   public enum LogType
@@ -81,7 +180,7 @@ public final class StoreProto {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return com.zstore.consensus.raft.proto.StoreProto.getDescriptor().getEnumTypes().get(0);
+      return com.zstore.consensus.raft.proto.StoreProto.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final LogType[] VALUES = values();
@@ -6330,6 +6429,2265 @@ public final class StoreProto {
 
   }
 
+  public interface AppendEntriesRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:raft.AppendEntriesRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 领导人的Id
+     * </pre>
+     *
+     * <code>optional uint32 server_id = 1;</code>
+     */
+    boolean hasServerId();
+    /**
+     * <pre>
+     * 领导人的Id
+     * </pre>
+     *
+     * <code>optional uint32 server_id = 1;</code>
+     */
+    int getServerId();
+
+    /**
+     * <pre>
+     * 领导人的任期号
+     * </pre>
+     *
+     * <code>optional uint64 term = 2;</code>
+     */
+    boolean hasTerm();
+    /**
+     * <pre>
+     * 领导人的任期号
+     * </pre>
+     *
+     * <code>optional uint64 term = 2;</code>
+     */
+    long getTerm();
+
+    /**
+     * <pre>
+     * 新的日志条目紧随之前的索引值
+     * </pre>
+     *
+     * <code>optional uint64 prev_log_index = 3;</code>
+     */
+    boolean hasPrevLogIndex();
+    /**
+     * <pre>
+     * 新的日志条目紧随之前的索引值
+     * </pre>
+     *
+     * <code>optional uint64 prev_log_index = 3;</code>
+     */
+    long getPrevLogIndex();
+
+    /**
+     * <pre>
+     * prev_log_index条目的任期号
+     * </pre>
+     *
+     * <code>optional uint64 prev_log_term = 4;</code>
+     */
+    boolean hasPrevLogTerm();
+    /**
+     * <pre>
+     * prev_log_index条目的任期号
+     * </pre>
+     *
+     * <code>optional uint64 prev_log_term = 4;</code>
+     */
+    long getPrevLogTerm();
+
+    /**
+     * <pre>
+     * 领导人已经提交的日志的索引值
+     * </pre>
+     *
+     * <code>optional uint64 commit_index = 5;</code>
+     */
+    boolean hasCommitIndex();
+    /**
+     * <pre>
+     * 领导人已经提交的日志的索引值
+     * </pre>
+     *
+     * <code>optional uint64 commit_index = 5;</code>
+     */
+    long getCommitIndex();
+
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    java.util.List<com.zstore.consensus.raft.proto.StoreProto.LogEntry> 
+        getEntriesList();
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    com.zstore.consensus.raft.proto.StoreProto.LogEntry getEntries(int index);
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    int getEntriesCount();
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    java.util.List<? extends com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder> 
+        getEntriesOrBuilderList();
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder getEntriesOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code raft.AppendEntriesRequest}
+   */
+  public  static final class AppendEntriesRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:raft.AppendEntriesRequest)
+      AppendEntriesRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use AppendEntriesRequest.newBuilder() to construct.
+    private AppendEntriesRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private AppendEntriesRequest() {
+      entries_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new AppendEntriesRequest();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private AppendEntriesRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+              bitField0_ |= 0x00000001;
+              serverId_ = input.readUInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              term_ = input.readUInt64();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              prevLogIndex_ = input.readUInt64();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              prevLogTerm_ = input.readUInt64();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              commitIndex_ = input.readUInt64();
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) != 0)) {
+                entries_ = new java.util.ArrayList<com.zstore.consensus.raft.proto.StoreProto.LogEntry>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              entries_.add(
+                  input.readMessage(com.zstore.consensus.raft.proto.StoreProto.LogEntry.PARSER, extensionRegistry));
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000020) != 0)) {
+          entries_ = java.util.Collections.unmodifiableList(entries_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesRequest_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest.class, com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int SERVER_ID_FIELD_NUMBER = 1;
+    private int serverId_;
+    /**
+     * <pre>
+     * 领导人的Id
+     * </pre>
+     *
+     * <code>optional uint32 server_id = 1;</code>
+     */
+    public boolean hasServerId() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <pre>
+     * 领导人的Id
+     * </pre>
+     *
+     * <code>optional uint32 server_id = 1;</code>
+     */
+    public int getServerId() {
+      return serverId_;
+    }
+
+    public static final int TERM_FIELD_NUMBER = 2;
+    private long term_;
+    /**
+     * <pre>
+     * 领导人的任期号
+     * </pre>
+     *
+     * <code>optional uint64 term = 2;</code>
+     */
+    public boolean hasTerm() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <pre>
+     * 领导人的任期号
+     * </pre>
+     *
+     * <code>optional uint64 term = 2;</code>
+     */
+    public long getTerm() {
+      return term_;
+    }
+
+    public static final int PREV_LOG_INDEX_FIELD_NUMBER = 3;
+    private long prevLogIndex_;
+    /**
+     * <pre>
+     * 新的日志条目紧随之前的索引值
+     * </pre>
+     *
+     * <code>optional uint64 prev_log_index = 3;</code>
+     */
+    public boolean hasPrevLogIndex() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <pre>
+     * 新的日志条目紧随之前的索引值
+     * </pre>
+     *
+     * <code>optional uint64 prev_log_index = 3;</code>
+     */
+    public long getPrevLogIndex() {
+      return prevLogIndex_;
+    }
+
+    public static final int PREV_LOG_TERM_FIELD_NUMBER = 4;
+    private long prevLogTerm_;
+    /**
+     * <pre>
+     * prev_log_index条目的任期号
+     * </pre>
+     *
+     * <code>optional uint64 prev_log_term = 4;</code>
+     */
+    public boolean hasPrevLogTerm() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <pre>
+     * prev_log_index条目的任期号
+     * </pre>
+     *
+     * <code>optional uint64 prev_log_term = 4;</code>
+     */
+    public long getPrevLogTerm() {
+      return prevLogTerm_;
+    }
+
+    public static final int COMMIT_INDEX_FIELD_NUMBER = 5;
+    private long commitIndex_;
+    /**
+     * <pre>
+     * 领导人已经提交的日志的索引值
+     * </pre>
+     *
+     * <code>optional uint64 commit_index = 5;</code>
+     */
+    public boolean hasCommitIndex() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     * <pre>
+     * 领导人已经提交的日志的索引值
+     * </pre>
+     *
+     * <code>optional uint64 commit_index = 5;</code>
+     */
+    public long getCommitIndex() {
+      return commitIndex_;
+    }
+
+    public static final int ENTRIES_FIELD_NUMBER = 6;
+    private java.util.List<com.zstore.consensus.raft.proto.StoreProto.LogEntry> entries_;
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    public java.util.List<com.zstore.consensus.raft.proto.StoreProto.LogEntry> getEntriesList() {
+      return entries_;
+    }
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    public java.util.List<? extends com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder> 
+        getEntriesOrBuilderList() {
+      return entries_;
+    }
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    public int getEntriesCount() {
+      return entries_.size();
+    }
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    public com.zstore.consensus.raft.proto.StoreProto.LogEntry getEntries(int index) {
+      return entries_.get(index);
+    }
+    /**
+     * <pre>
+     * 准备存储的日志条目（表示心跳时为空）
+     * </pre>
+     *
+     * <code>repeated .raft.LogEntry entries = 6;</code>
+     */
+    public com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder getEntriesOrBuilder(
+        int index) {
+      return entries_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeUInt32(1, serverId_);
+      }
+      if (((bitField0_ & 0x00000002) != 0)) {
+        output.writeUInt64(2, term_);
+      }
+      if (((bitField0_ & 0x00000004) != 0)) {
+        output.writeUInt64(3, prevLogIndex_);
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        output.writeUInt64(4, prevLogTerm_);
+      }
+      if (((bitField0_ & 0x00000010) != 0)) {
+        output.writeUInt64(5, commitIndex_);
+      }
+      for (int i = 0; i < entries_.size(); i++) {
+        output.writeMessage(6, entries_.get(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(1, serverId_);
+      }
+      if (((bitField0_ & 0x00000002) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(2, term_);
+      }
+      if (((bitField0_ & 0x00000004) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(3, prevLogIndex_);
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(4, prevLogTerm_);
+      }
+      if (((bitField0_ & 0x00000010) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(5, commitIndex_);
+      }
+      for (int i = 0; i < entries_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, entries_.get(i));
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest)) {
+        return super.equals(obj);
+      }
+      com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest other = (com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest) obj;
+
+      if (hasServerId() != other.hasServerId()) return false;
+      if (hasServerId()) {
+        if (getServerId()
+            != other.getServerId()) return false;
+      }
+      if (hasTerm() != other.hasTerm()) return false;
+      if (hasTerm()) {
+        if (getTerm()
+            != other.getTerm()) return false;
+      }
+      if (hasPrevLogIndex() != other.hasPrevLogIndex()) return false;
+      if (hasPrevLogIndex()) {
+        if (getPrevLogIndex()
+            != other.getPrevLogIndex()) return false;
+      }
+      if (hasPrevLogTerm() != other.hasPrevLogTerm()) return false;
+      if (hasPrevLogTerm()) {
+        if (getPrevLogTerm()
+            != other.getPrevLogTerm()) return false;
+      }
+      if (hasCommitIndex() != other.hasCommitIndex()) return false;
+      if (hasCommitIndex()) {
+        if (getCommitIndex()
+            != other.getCommitIndex()) return false;
+      }
+      if (!getEntriesList()
+          .equals(other.getEntriesList())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasServerId()) {
+        hash = (37 * hash) + SERVER_ID_FIELD_NUMBER;
+        hash = (53 * hash) + getServerId();
+      }
+      if (hasTerm()) {
+        hash = (37 * hash) + TERM_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getTerm());
+      }
+      if (hasPrevLogIndex()) {
+        hash = (37 * hash) + PREV_LOG_INDEX_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getPrevLogIndex());
+      }
+      if (hasPrevLogTerm()) {
+        hash = (37 * hash) + PREV_LOG_TERM_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getPrevLogTerm());
+      }
+      if (hasCommitIndex()) {
+        hash = (37 * hash) + COMMIT_INDEX_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getCommitIndex());
+      }
+      if (getEntriesCount() > 0) {
+        hash = (37 * hash) + ENTRIES_FIELD_NUMBER;
+        hash = (53 * hash) + getEntriesList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code raft.AppendEntriesRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:raft.AppendEntriesRequest)
+        com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesRequest_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest.class, com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest.Builder.class);
+      }
+
+      // Construct using com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getEntriesFieldBuilder();
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        serverId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        term_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        prevLogIndex_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        prevLogTerm_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        commitIndex_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        if (entriesBuilder_ == null) {
+          entries_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+        } else {
+          entriesBuilder_.clear();
+        }
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesRequest_descriptor;
+      }
+
+      @java.lang.Override
+      public com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest getDefaultInstanceForType() {
+        return com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest build() {
+        com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest buildPartial() {
+        com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest result = new com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.serverId_ = serverId_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.term_ = term_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.prevLogIndex_ = prevLogIndex_;
+          to_bitField0_ |= 0x00000004;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.prevLogTerm_ = prevLogTerm_;
+          to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.commitIndex_ = commitIndex_;
+          to_bitField0_ |= 0x00000010;
+        }
+        if (entriesBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) != 0)) {
+            entries_ = java.util.Collections.unmodifiableList(entries_);
+            bitField0_ = (bitField0_ & ~0x00000020);
+          }
+          result.entries_ = entries_;
+        } else {
+          result.entries_ = entriesBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest) {
+          return mergeFrom((com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest other) {
+        if (other == com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest.getDefaultInstance()) return this;
+        if (other.hasServerId()) {
+          setServerId(other.getServerId());
+        }
+        if (other.hasTerm()) {
+          setTerm(other.getTerm());
+        }
+        if (other.hasPrevLogIndex()) {
+          setPrevLogIndex(other.getPrevLogIndex());
+        }
+        if (other.hasPrevLogTerm()) {
+          setPrevLogTerm(other.getPrevLogTerm());
+        }
+        if (other.hasCommitIndex()) {
+          setCommitIndex(other.getCommitIndex());
+        }
+        if (entriesBuilder_ == null) {
+          if (!other.entries_.isEmpty()) {
+            if (entries_.isEmpty()) {
+              entries_ = other.entries_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+            } else {
+              ensureEntriesIsMutable();
+              entries_.addAll(other.entries_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.entries_.isEmpty()) {
+            if (entriesBuilder_.isEmpty()) {
+              entriesBuilder_.dispose();
+              entriesBuilder_ = null;
+              entries_ = other.entries_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+              entriesBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getEntriesFieldBuilder() : null;
+            } else {
+              entriesBuilder_.addAllMessages(other.entries_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int serverId_ ;
+      /**
+       * <pre>
+       * 领导人的Id
+       * </pre>
+       *
+       * <code>optional uint32 server_id = 1;</code>
+       */
+      public boolean hasServerId() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <pre>
+       * 领导人的Id
+       * </pre>
+       *
+       * <code>optional uint32 server_id = 1;</code>
+       */
+      public int getServerId() {
+        return serverId_;
+      }
+      /**
+       * <pre>
+       * 领导人的Id
+       * </pre>
+       *
+       * <code>optional uint32 server_id = 1;</code>
+       */
+      public Builder setServerId(int value) {
+        bitField0_ |= 0x00000001;
+        serverId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 领导人的Id
+       * </pre>
+       *
+       * <code>optional uint32 server_id = 1;</code>
+       */
+      public Builder clearServerId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        serverId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private long term_ ;
+      /**
+       * <pre>
+       * 领导人的任期号
+       * </pre>
+       *
+       * <code>optional uint64 term = 2;</code>
+       */
+      public boolean hasTerm() {
+        return ((bitField0_ & 0x00000002) != 0);
+      }
+      /**
+       * <pre>
+       * 领导人的任期号
+       * </pre>
+       *
+       * <code>optional uint64 term = 2;</code>
+       */
+      public long getTerm() {
+        return term_;
+      }
+      /**
+       * <pre>
+       * 领导人的任期号
+       * </pre>
+       *
+       * <code>optional uint64 term = 2;</code>
+       */
+      public Builder setTerm(long value) {
+        bitField0_ |= 0x00000002;
+        term_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 领导人的任期号
+       * </pre>
+       *
+       * <code>optional uint64 term = 2;</code>
+       */
+      public Builder clearTerm() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        term_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long prevLogIndex_ ;
+      /**
+       * <pre>
+       * 新的日志条目紧随之前的索引值
+       * </pre>
+       *
+       * <code>optional uint64 prev_log_index = 3;</code>
+       */
+      public boolean hasPrevLogIndex() {
+        return ((bitField0_ & 0x00000004) != 0);
+      }
+      /**
+       * <pre>
+       * 新的日志条目紧随之前的索引值
+       * </pre>
+       *
+       * <code>optional uint64 prev_log_index = 3;</code>
+       */
+      public long getPrevLogIndex() {
+        return prevLogIndex_;
+      }
+      /**
+       * <pre>
+       * 新的日志条目紧随之前的索引值
+       * </pre>
+       *
+       * <code>optional uint64 prev_log_index = 3;</code>
+       */
+      public Builder setPrevLogIndex(long value) {
+        bitField0_ |= 0x00000004;
+        prevLogIndex_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 新的日志条目紧随之前的索引值
+       * </pre>
+       *
+       * <code>optional uint64 prev_log_index = 3;</code>
+       */
+      public Builder clearPrevLogIndex() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        prevLogIndex_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long prevLogTerm_ ;
+      /**
+       * <pre>
+       * prev_log_index条目的任期号
+       * </pre>
+       *
+       * <code>optional uint64 prev_log_term = 4;</code>
+       */
+      public boolean hasPrevLogTerm() {
+        return ((bitField0_ & 0x00000008) != 0);
+      }
+      /**
+       * <pre>
+       * prev_log_index条目的任期号
+       * </pre>
+       *
+       * <code>optional uint64 prev_log_term = 4;</code>
+       */
+      public long getPrevLogTerm() {
+        return prevLogTerm_;
+      }
+      /**
+       * <pre>
+       * prev_log_index条目的任期号
+       * </pre>
+       *
+       * <code>optional uint64 prev_log_term = 4;</code>
+       */
+      public Builder setPrevLogTerm(long value) {
+        bitField0_ |= 0x00000008;
+        prevLogTerm_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * prev_log_index条目的任期号
+       * </pre>
+       *
+       * <code>optional uint64 prev_log_term = 4;</code>
+       */
+      public Builder clearPrevLogTerm() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        prevLogTerm_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long commitIndex_ ;
+      /**
+       * <pre>
+       * 领导人已经提交的日志的索引值
+       * </pre>
+       *
+       * <code>optional uint64 commit_index = 5;</code>
+       */
+      public boolean hasCommitIndex() {
+        return ((bitField0_ & 0x00000010) != 0);
+      }
+      /**
+       * <pre>
+       * 领导人已经提交的日志的索引值
+       * </pre>
+       *
+       * <code>optional uint64 commit_index = 5;</code>
+       */
+      public long getCommitIndex() {
+        return commitIndex_;
+      }
+      /**
+       * <pre>
+       * 领导人已经提交的日志的索引值
+       * </pre>
+       *
+       * <code>optional uint64 commit_index = 5;</code>
+       */
+      public Builder setCommitIndex(long value) {
+        bitField0_ |= 0x00000010;
+        commitIndex_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 领导人已经提交的日志的索引值
+       * </pre>
+       *
+       * <code>optional uint64 commit_index = 5;</code>
+       */
+      public Builder clearCommitIndex() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        commitIndex_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.zstore.consensus.raft.proto.StoreProto.LogEntry> entries_ =
+        java.util.Collections.emptyList();
+      private void ensureEntriesIsMutable() {
+        if (!((bitField0_ & 0x00000020) != 0)) {
+          entries_ = new java.util.ArrayList<com.zstore.consensus.raft.proto.StoreProto.LogEntry>(entries_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.zstore.consensus.raft.proto.StoreProto.LogEntry, com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder, com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder> entriesBuilder_;
+
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public java.util.List<com.zstore.consensus.raft.proto.StoreProto.LogEntry> getEntriesList() {
+        if (entriesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(entries_);
+        } else {
+          return entriesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public int getEntriesCount() {
+        if (entriesBuilder_ == null) {
+          return entries_.size();
+        } else {
+          return entriesBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public com.zstore.consensus.raft.proto.StoreProto.LogEntry getEntries(int index) {
+        if (entriesBuilder_ == null) {
+          return entries_.get(index);
+        } else {
+          return entriesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder setEntries(
+          int index, com.zstore.consensus.raft.proto.StoreProto.LogEntry value) {
+        if (entriesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEntriesIsMutable();
+          entries_.set(index, value);
+          onChanged();
+        } else {
+          entriesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder setEntries(
+          int index, com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder builderForValue) {
+        if (entriesBuilder_ == null) {
+          ensureEntriesIsMutable();
+          entries_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          entriesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder addEntries(com.zstore.consensus.raft.proto.StoreProto.LogEntry value) {
+        if (entriesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEntriesIsMutable();
+          entries_.add(value);
+          onChanged();
+        } else {
+          entriesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder addEntries(
+          int index, com.zstore.consensus.raft.proto.StoreProto.LogEntry value) {
+        if (entriesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEntriesIsMutable();
+          entries_.add(index, value);
+          onChanged();
+        } else {
+          entriesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder addEntries(
+          com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder builderForValue) {
+        if (entriesBuilder_ == null) {
+          ensureEntriesIsMutable();
+          entries_.add(builderForValue.build());
+          onChanged();
+        } else {
+          entriesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder addEntries(
+          int index, com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder builderForValue) {
+        if (entriesBuilder_ == null) {
+          ensureEntriesIsMutable();
+          entries_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          entriesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder addAllEntries(
+          java.lang.Iterable<? extends com.zstore.consensus.raft.proto.StoreProto.LogEntry> values) {
+        if (entriesBuilder_ == null) {
+          ensureEntriesIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, entries_);
+          onChanged();
+        } else {
+          entriesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder clearEntries() {
+        if (entriesBuilder_ == null) {
+          entries_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+          onChanged();
+        } else {
+          entriesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public Builder removeEntries(int index) {
+        if (entriesBuilder_ == null) {
+          ensureEntriesIsMutable();
+          entries_.remove(index);
+          onChanged();
+        } else {
+          entriesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder getEntriesBuilder(
+          int index) {
+        return getEntriesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder getEntriesOrBuilder(
+          int index) {
+        if (entriesBuilder_ == null) {
+          return entries_.get(index);  } else {
+          return entriesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public java.util.List<? extends com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder> 
+           getEntriesOrBuilderList() {
+        if (entriesBuilder_ != null) {
+          return entriesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(entries_);
+        }
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder addEntriesBuilder() {
+        return getEntriesFieldBuilder().addBuilder(
+            com.zstore.consensus.raft.proto.StoreProto.LogEntry.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder addEntriesBuilder(
+          int index) {
+        return getEntriesFieldBuilder().addBuilder(
+            index, com.zstore.consensus.raft.proto.StoreProto.LogEntry.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * 准备存储的日志条目（表示心跳时为空）
+       * </pre>
+       *
+       * <code>repeated .raft.LogEntry entries = 6;</code>
+       */
+      public java.util.List<com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder> 
+           getEntriesBuilderList() {
+        return getEntriesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.zstore.consensus.raft.proto.StoreProto.LogEntry, com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder, com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder> 
+          getEntriesFieldBuilder() {
+        if (entriesBuilder_ == null) {
+          entriesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              com.zstore.consensus.raft.proto.StoreProto.LogEntry, com.zstore.consensus.raft.proto.StoreProto.LogEntry.Builder, com.zstore.consensus.raft.proto.StoreProto.LogEntryOrBuilder>(
+                  entries_,
+                  ((bitField0_ & 0x00000020) != 0),
+                  getParentForChildren(),
+                  isClean());
+          entries_ = null;
+        }
+        return entriesBuilder_;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:raft.AppendEntriesRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:raft.AppendEntriesRequest)
+    private static final com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest();
+    }
+
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<AppendEntriesRequest>
+        PARSER = new com.google.protobuf.AbstractParser<AppendEntriesRequest>() {
+      @java.lang.Override
+      public AppendEntriesRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AppendEntriesRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AppendEntriesRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AppendEntriesRequest> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.zstore.consensus.raft.proto.StoreProto.AppendEntriesRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface AppendEntriesResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:raft.AppendEntriesResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+     * </pre>
+     *
+     * <code>optional .raft.ResCode res_code = 1;</code>
+     */
+    boolean hasResCode();
+    /**
+     * <pre>
+     * 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+     * </pre>
+     *
+     * <code>optional .raft.ResCode res_code = 1;</code>
+     */
+    com.zstore.consensus.raft.proto.StoreProto.ResCode getResCode();
+
+    /**
+     * <pre>
+     * 当前的任期号，用于领导人去更新自己
+     * </pre>
+     *
+     * <code>optional uint64 term = 2;</code>
+     */
+    boolean hasTerm();
+    /**
+     * <pre>
+     * 当前的任期号，用于领导人去更新自己
+     * </pre>
+     *
+     * <code>optional uint64 term = 2;</code>
+     */
+    long getTerm();
+
+    /**
+     * <code>optional uint64 last_log_index = 3;</code>
+     */
+    boolean hasLastLogIndex();
+    /**
+     * <code>optional uint64 last_log_index = 3;</code>
+     */
+    long getLastLogIndex();
+  }
+  /**
+   * Protobuf type {@code raft.AppendEntriesResponse}
+   */
+  public  static final class AppendEntriesResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:raft.AppendEntriesResponse)
+      AppendEntriesResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use AppendEntriesResponse.newBuilder() to construct.
+    private AppendEntriesResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private AppendEntriesResponse() {
+      resCode_ = 0;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new AppendEntriesResponse();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private AppendEntriesResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+              int rawValue = input.readEnum();
+                @SuppressWarnings("deprecation")
+              com.zstore.consensus.raft.proto.StoreProto.ResCode value = com.zstore.consensus.raft.proto.StoreProto.ResCode.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                resCode_ = rawValue;
+              }
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              term_ = input.readUInt64();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              lastLogIndex_ = input.readUInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesResponse_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse.class, com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int RES_CODE_FIELD_NUMBER = 1;
+    private int resCode_;
+    /**
+     * <pre>
+     * 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+     * </pre>
+     *
+     * <code>optional .raft.ResCode res_code = 1;</code>
+     */
+    public boolean hasResCode() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <pre>
+     * 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+     * </pre>
+     *
+     * <code>optional .raft.ResCode res_code = 1;</code>
+     */
+    public com.zstore.consensus.raft.proto.StoreProto.ResCode getResCode() {
+      @SuppressWarnings("deprecation")
+      com.zstore.consensus.raft.proto.StoreProto.ResCode result = com.zstore.consensus.raft.proto.StoreProto.ResCode.valueOf(resCode_);
+      return result == null ? com.zstore.consensus.raft.proto.StoreProto.ResCode.RES_CODE_SUCCESS : result;
+    }
+
+    public static final int TERM_FIELD_NUMBER = 2;
+    private long term_;
+    /**
+     * <pre>
+     * 当前的任期号，用于领导人去更新自己
+     * </pre>
+     *
+     * <code>optional uint64 term = 2;</code>
+     */
+    public boolean hasTerm() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <pre>
+     * 当前的任期号，用于领导人去更新自己
+     * </pre>
+     *
+     * <code>optional uint64 term = 2;</code>
+     */
+    public long getTerm() {
+      return term_;
+    }
+
+    public static final int LAST_LOG_INDEX_FIELD_NUMBER = 3;
+    private long lastLogIndex_;
+    /**
+     * <code>optional uint64 last_log_index = 3;</code>
+     */
+    public boolean hasLastLogIndex() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <code>optional uint64 last_log_index = 3;</code>
+     */
+    public long getLastLogIndex() {
+      return lastLogIndex_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeEnum(1, resCode_);
+      }
+      if (((bitField0_ & 0x00000002) != 0)) {
+        output.writeUInt64(2, term_);
+      }
+      if (((bitField0_ & 0x00000004) != 0)) {
+        output.writeUInt64(3, lastLogIndex_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, resCode_);
+      }
+      if (((bitField0_ & 0x00000002) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(2, term_);
+      }
+      if (((bitField0_ & 0x00000004) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(3, lastLogIndex_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse)) {
+        return super.equals(obj);
+      }
+      com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse other = (com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse) obj;
+
+      if (hasResCode() != other.hasResCode()) return false;
+      if (hasResCode()) {
+        if (resCode_ != other.resCode_) return false;
+      }
+      if (hasTerm() != other.hasTerm()) return false;
+      if (hasTerm()) {
+        if (getTerm()
+            != other.getTerm()) return false;
+      }
+      if (hasLastLogIndex() != other.hasLastLogIndex()) return false;
+      if (hasLastLogIndex()) {
+        if (getLastLogIndex()
+            != other.getLastLogIndex()) return false;
+      }
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasResCode()) {
+        hash = (37 * hash) + RES_CODE_FIELD_NUMBER;
+        hash = (53 * hash) + resCode_;
+      }
+      if (hasTerm()) {
+        hash = (37 * hash) + TERM_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getTerm());
+      }
+      if (hasLastLogIndex()) {
+        hash = (37 * hash) + LAST_LOG_INDEX_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getLastLogIndex());
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code raft.AppendEntriesResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:raft.AppendEntriesResponse)
+        com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesResponse_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse.class, com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse.Builder.class);
+      }
+
+      // Construct using com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        resCode_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        term_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        lastLogIndex_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.zstore.consensus.raft.proto.StoreProto.internal_static_raft_AppendEntriesResponse_descriptor;
+      }
+
+      @java.lang.Override
+      public com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse getDefaultInstanceForType() {
+        return com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse build() {
+        com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse buildPartial() {
+        com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse result = new com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.resCode_ = resCode_;
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.term_ = term_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.lastLogIndex_ = lastLogIndex_;
+          to_bitField0_ |= 0x00000004;
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse) {
+          return mergeFrom((com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse other) {
+        if (other == com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse.getDefaultInstance()) return this;
+        if (other.hasResCode()) {
+          setResCode(other.getResCode());
+        }
+        if (other.hasTerm()) {
+          setTerm(other.getTerm());
+        }
+        if (other.hasLastLogIndex()) {
+          setLastLogIndex(other.getLastLogIndex());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int resCode_ = 0;
+      /**
+       * <pre>
+       * 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+       * </pre>
+       *
+       * <code>optional .raft.ResCode res_code = 1;</code>
+       */
+      public boolean hasResCode() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <pre>
+       * 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+       * </pre>
+       *
+       * <code>optional .raft.ResCode res_code = 1;</code>
+       */
+      public com.zstore.consensus.raft.proto.StoreProto.ResCode getResCode() {
+        @SuppressWarnings("deprecation")
+        com.zstore.consensus.raft.proto.StoreProto.ResCode result = com.zstore.consensus.raft.proto.StoreProto.ResCode.valueOf(resCode_);
+        return result == null ? com.zstore.consensus.raft.proto.StoreProto.ResCode.RES_CODE_SUCCESS : result;
+      }
+      /**
+       * <pre>
+       * 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+       * </pre>
+       *
+       * <code>optional .raft.ResCode res_code = 1;</code>
+       */
+      public Builder setResCode(com.zstore.consensus.raft.proto.StoreProto.ResCode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        resCode_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+       * </pre>
+       *
+       * <code>optional .raft.ResCode res_code = 1;</code>
+       */
+      public Builder clearResCode() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        resCode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private long term_ ;
+      /**
+       * <pre>
+       * 当前的任期号，用于领导人去更新自己
+       * </pre>
+       *
+       * <code>optional uint64 term = 2;</code>
+       */
+      public boolean hasTerm() {
+        return ((bitField0_ & 0x00000002) != 0);
+      }
+      /**
+       * <pre>
+       * 当前的任期号，用于领导人去更新自己
+       * </pre>
+       *
+       * <code>optional uint64 term = 2;</code>
+       */
+      public long getTerm() {
+        return term_;
+      }
+      /**
+       * <pre>
+       * 当前的任期号，用于领导人去更新自己
+       * </pre>
+       *
+       * <code>optional uint64 term = 2;</code>
+       */
+      public Builder setTerm(long value) {
+        bitField0_ |= 0x00000002;
+        term_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前的任期号，用于领导人去更新自己
+       * </pre>
+       *
+       * <code>optional uint64 term = 2;</code>
+       */
+      public Builder clearTerm() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        term_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long lastLogIndex_ ;
+      /**
+       * <code>optional uint64 last_log_index = 3;</code>
+       */
+      public boolean hasLastLogIndex() {
+        return ((bitField0_ & 0x00000004) != 0);
+      }
+      /**
+       * <code>optional uint64 last_log_index = 3;</code>
+       */
+      public long getLastLogIndex() {
+        return lastLogIndex_;
+      }
+      /**
+       * <code>optional uint64 last_log_index = 3;</code>
+       */
+      public Builder setLastLogIndex(long value) {
+        bitField0_ |= 0x00000004;
+        lastLogIndex_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 last_log_index = 3;</code>
+       */
+      public Builder clearLastLogIndex() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        lastLogIndex_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:raft.AppendEntriesResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:raft.AppendEntriesResponse)
+    private static final com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse();
+    }
+
+    public static com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<AppendEntriesResponse>
+        PARSER = new com.google.protobuf.AbstractParser<AppendEntriesResponse>() {
+      @java.lang.Override
+      public AppendEntriesResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AppendEntriesResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AppendEntriesResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AppendEntriesResponse> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.zstore.consensus.raft.proto.StoreProto.AppendEntriesResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_raft_LogEntry_descriptor;
   private static final 
@@ -6370,6 +8728,16 @@ public final class StoreProto {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_raft_VoteResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_raft_AppendEntriesRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_raft_AppendEntriesRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_raft_AppendEntriesResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_raft_AppendEntriesResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -6393,10 +8761,18 @@ public final class StoreProto {
       "ft.Configuration\"]\n\013VoteRequest\022\021\n\tserve" +
       "r_id\030\001 \001(\r\022\014\n\004term\030\002 \001(\004\022\025\n\rlast_log_ter" +
       "m\030\003 \001(\004\022\026\n\016last_log_index\030\004 \001(\004\"-\n\014VoteR" +
-      "esponse\022\014\n\004term\030\001 \001(\004\022\017\n\007granted\030\002 \001(\010*<" +
-      "\n\007LogType\022\023\n\017ENTRY_TYPE_DATA\020\000\022\034\n\030ENTRY_" +
-      "TYPE_CONFIGURATION\020\001B-\n\037com.zstore.conse" +
-      "nsus.raft.protoB\nStoreProto"
+      "esponse\022\014\n\004term\030\001 \001(\004\022\017\n\007granted\030\002 \001(\010\"\235" +
+      "\001\n\024AppendEntriesRequest\022\021\n\tserver_id\030\001 \001" +
+      "(\r\022\014\n\004term\030\002 \001(\004\022\026\n\016prev_log_index\030\003 \001(\004" +
+      "\022\025\n\rprev_log_term\030\004 \001(\004\022\024\n\014commit_index\030" +
+      "\005 \001(\004\022\037\n\007entries\030\006 \003(\0132\016.raft.LogEntry\"^" +
+      "\n\025AppendEntriesResponse\022\037\n\010res_code\030\001 \001(" +
+      "\0162\r.raft.ResCode\022\014\n\004term\030\002 \001(\004\022\026\n\016last_l" +
+      "og_index\030\003 \001(\004*K\n\007ResCode\022\024\n\020RES_CODE_SU" +
+      "CCESS\020\000\022\021\n\rRES_CODE_FAIL\020\001\022\027\n\023RES_CODE_N" +
+      "OT_LEADER\020\002*<\n\007LogType\022\023\n\017ENTRY_TYPE_DAT" +
+      "A\020\000\022\034\n\030ENTRY_TYPE_CONFIGURATION\020\001B-\n\037com" +
+      ".zstore.consensus.raft.protoB\nStoreProto"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -6450,6 +8826,18 @@ public final class StoreProto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_raft_VoteResponse_descriptor,
         new java.lang.String[] { "Term", "Granted", });
+    internal_static_raft_AppendEntriesRequest_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_raft_AppendEntriesRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_raft_AppendEntriesRequest_descriptor,
+        new java.lang.String[] { "ServerId", "Term", "PrevLogIndex", "PrevLogTerm", "CommitIndex", "Entries", });
+    internal_static_raft_AppendEntriesResponse_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_raft_AppendEntriesResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_raft_AppendEntriesResponse_descriptor,
+        new java.lang.String[] { "ResCode", "Term", "LastLogIndex", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

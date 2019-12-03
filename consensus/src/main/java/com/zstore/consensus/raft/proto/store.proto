@@ -4,10 +4,16 @@ package raft;
 option java_package = "com.zstore.consensus.raft.proto";
 option java_outer_classname = "StoreProto";
 
+enum ResCode {
+    RES_CODE_SUCCESS = 0;
+    RES_CODE_FAIL = 1;
+    RES_CODE_NOT_LEADER = 2;
+}
 enum LogType {
     ENTRY_TYPE_DATA = 0;
     ENTRY_TYPE_CONFIGURATION= 1;
 }
+
 message LogEntry {
     optional uint64 term = 1; //任期
     optional uint64 index = 2; //索引
@@ -49,5 +55,20 @@ message VoteRequest {
 message VoteResponse {
     optional uint64 term = 1; // 当前任期号，以便于候选人去更新自己的任期号
     optional bool granted = 2; // 候选人赢得了此张选票时为真
+};
+
+message AppendEntriesRequest {
+    optional uint32 server_id = 1; // 领导人的Id
+    optional uint64 term = 2; // 领导人的任期号
+    optional uint64 prev_log_index = 3; // 新的日志条目紧随之前的索引值
+    optional uint64 prev_log_term = 4; // prev_log_index条目的任期号
+    optional uint64 commit_index = 5; // 领导人已经提交的日志的索引值
+    repeated LogEntry entries = 6; // 准备存储的日志条目（表示心跳时为空）
+}
+
+message AppendEntriesResponse {
+    optional ResCode res_code = 1; // 跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
+    optional uint64 term = 2; // 当前的任期号，用于领导人去更新自己
+    optional uint64 last_log_index = 3;
 };
 

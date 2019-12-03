@@ -7,7 +7,6 @@ import java.util.concurrent.Future;
 
 /**
  * 用于生成client异步调用所需的proxy
- * Created by wenweihu86 on 2017/5/2.
  */
 public interface RaftConsensusServiceAsync extends RaftConsensusService {
 
@@ -19,9 +18,9 @@ public interface RaftConsensusServiceAsync extends RaftConsensusService {
             StoreProto.VoteRequest request,
             RpcCallback<StoreProto.VoteResponse> callback);
 
-//    Future<RaftProto.AppendEntriesResponse> appendEntries(
-//            RaftProto.AppendEntriesRequest request,
-//            RpcCallback<RaftProto.AppendEntriesResponse> callback);
+    Future<StoreProto.AppendEntriesResponse> appendEntries(
+            StoreProto.AppendEntriesRequest request,
+            RpcCallback<StoreProto.AppendEntriesResponse> callback);
 //
 //    Future<RaftProto.InstallSnapshotResponse> installSnapshot(
 //            RaftProto.InstallSnapshotRequest request,

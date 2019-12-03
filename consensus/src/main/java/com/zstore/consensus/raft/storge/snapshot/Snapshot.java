@@ -58,4 +58,12 @@ public class Snapshot {
     public String getSnapshotDir() {
         return snapshotDir;
     }
+
+    public Lock getLock() {
+        return lock;
+    }
+
+    public void setLock(Lock lock) {
+        this.lock = lock;
+    }
 }

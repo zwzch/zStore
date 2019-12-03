@@ -10,10 +10,12 @@ import com.zstore.consensus.raft.service.RaftStateMachine;
 import com.zstore.consensus.raft.storge.segment.SegmentLog;
 import com.zstore.consensus.raft.storge.snapshot.Snapshot;
 import com.zstore.consensus.raft.utils.ConfigurationUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
@@ -355,12 +357,195 @@ public class RaftNode {
     }
 
     private void becomeLeader() {
+        System.out.println("become leader");
         state = RaftNodeState.STATE_LEADER;
         leaderId = localServer.getServerId();
         // stop vote timer
         if (electionScheduledFuture != null && !electionScheduledFuture.isDone()) {
             electionScheduledFuture.cancel(true);
         }
+        // start heartbeat timer
+        startNewHeartbeat();
+    }
+
+    // heartbeat timer, append entries
+    // in lock
+    private void resetHeartbeatTimer() {
+        if (heartbeatScheduledFuture != null && !heartbeatScheduledFuture.isDone()) {
+            heartbeatScheduledFuture.cancel(true);
+        }
+        heartbeatScheduledFuture = scheduledExecutorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                startNewHeartbeat();
+            }
+        }, raftOptions.getHeartbeatPeriodMilliseconds(), TimeUnit.MILLISECONDS);
+    }
+
+    private void startNewHeartbeat() {
+        LOG.info("start new heartbeat, peers={}", peerMap.keySet());
+        for (final RaftPeer peer : peerMap.values()) {
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    appendEntries(peer);
+                }
+            });
+        }
+        resetHeartbeatTimer();
+    }
+
+    private void appendEntries(RaftPeer peer) {
+        StoreProto.AppendEntriesRequest.Builder requestBuilder = StoreProto.AppendEntriesRequest.newBuilder();
+        long prevLogIndex;
+        long numEntries;
+        boolean isNeedInstallSnapshot = false;
+        lock.lock();
+        try {
+            long firstLogIndex = raftLog.getFirstIndex();
+            if (peer.getNextIndex() < firstLogIndex) {
+                isNeedInstallSnapshot = true;
+            }
+        } finally {
+            lock.unlock();
+        }
+        LOG.info("is need snapshot={}, peer={}", isNeedInstallSnapshot, peer.getServer().getServerId());
+        if (isNeedInstallSnapshot) {
+            if (!installSnapshot(peer)) {
+                return;
+            }
+        }
+        long lastSnapshotIndex;
+        long lastSnapshotTerm;
+        snapshot.getLock().lock();
+        try {
+            lastSnapshotIndex = snapshot.getMetaData().getLastIncludedIndex();
+            lastSnapshotTerm = snapshot.getMetaData().getLastIncludedTerm();
+        } finally {
+            snapshot.getLock().unlock();
+        }
+        lock.lock();
+        try {
+            long firstLogIndex = raftLog.getFirstIndex();
+            Validate.isTrue(peer.getNextIndex() >= firstLogIndex);
+            prevLogIndex = peer.getNextIndex() - 1;
+            long prevLogTerm;
+            if (prevLogIndex == 0) {
+                prevLogTerm = 0;
+            } else if (prevLogIndex == lastSnapshotIndex) {
+                prevLogTerm = lastSnapshotTerm;
+            } else {
+                prevLogTerm = raftLog.getEntryTerm(prevLogIndex);
+            }
+            requestBuilder.setServerId(localServer.getServerId());
+            requestBuilder.setTerm(currentTerm);
+            requestBuilder.setPrevLogTerm(prevLogTerm);
+            requestBuilder.setPrevLogIndex(prevLogIndex);
+            numEntries = packEntries(peer.getNextIndex(), requestBuilder);
+            requestBuilder.setCommitIndex(Math.min(commitIndex, prevLogIndex + numEntries));
+        } finally {
+            lock.unlock();
+        }
+        StoreProto.AppendEntriesRequest request = requestBuilder.build();
+        StoreProto.AppendEntriesResponse response = peer.getRaftConsensusServiceAsync().appendEntries(request);
+
+        lock.lock();
+        try {
+            // error handing
+            if (response == null) {
+                LOG.warn("appendEntries with peer[{}:{}] failed",
+                        peer.getServer().getEndpoint().getHost(),
+                        peer.getServer().getEndpoint().getPort());
+                if (!ConfigurationUtils.containsServer(configuration, peer.getServer().getServerId())) {
+                    peerMap.remove(peer.getServer().getServerId());
+                    peer.getRpcClient().stop();
+                }
+                return;
+            }
+            LOG.info("AppendEntries response[{}] from server {} " +
+                            "in term {} (my term is {})",
+                    response.getResCode(), peer.getServer().getServerId(),
+                    response.getTerm(), currentTerm);
+            if (response.getTerm() > currentTerm) {
+                // 任期变更
+                stepDown(response.getTerm());
+            } else {
+                if (response.getResCode() == StoreProto.ResCode.RES_CODE_SUCCESS) {
+                    peer.setMatchIndex(prevLogIndex + numEntries);
+                    peer.setNextIndex(peer.getMatchIndex() + 1);
+                    if (ConfigurationUtils.containsServer(configuration, peer.getServer().getServerId())) {
+                        advanceCommitIndex();
+                    } else {
+                        if (raftLog.getLastLogIndex() - peer.getMatchIndex() <= raftOptions.getCatchupMargin()) {
+                            LOG.debug("peer catch up the leader");
+                            peer.setCatchUp(true);
+                            // signal the caller thread
+                            catchUpCondition.signalAll();
+                        }
+                    }
+                } else {
+                    peer.setNextIndex(response.getLastLogIndex() + 1);
+                }
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void advanceCommitIndex() {
+        int peerNum = configuration.getServersList().size();
+        long[] matchIndexes = new long[peerNum];
+        int i = 0;
+        // 获取每个matchIndex
+        for (StoreProto.Server server : configuration.getServersList()) {
+            if (server.getServerId() != localServer.getServerId()) {
+                RaftPeer peer = peerMap.get(server.getServerId());
+                matchIndexes[i++] = peer.getMatchIndex();
+            }
+        }
+        // leader index
+        matchIndexes[i] = raftLog.getLastLogIndex();
+        Arrays.sort(matchIndexes);
+        long newCommitIndex = matchIndexes[peerNum/2];
+        LOG.debug("newCommitIndex={}, oldCommitIndex={}", newCommitIndex, commitIndex);
+        // term error
+        if (raftLog.getEntryTerm(newCommitIndex) != currentTerm) {
+            LOG.debug("newCommitIndexTerm={}, currentTerm={}",
+                    raftLog.getEntryTerm(newCommitIndex), currentTerm);
+            return;
+        }
+        if (commitIndex >= newCommitIndex) {
+            return;
+        }
+        long oldCommitIndex = commitIndex;
+        commitIndex = newCommitIndex;
+        // 同步到状态机
+        for (long index = oldCommitIndex + 1; index <= newCommitIndex; index++) {
+            StoreProto.LogEntry entry = raftLog.getEntry(index);
+            if (entry.getType() == StoreProto.LogType.ENTRY_TYPE_DATA) {
+                stateMachine.apply(entry.getData().toByteArray());
+            } else if (entry.getType() == StoreProto.LogType.ENTRY_TYPE_CONFIGURATION) {
+                applyConfiguration(entry);
+            }
+        }
+        lastAppliedIndex = commitIndex;
+        LOG.debug("commitIndex={} lastAppliedIndex={}", commitIndex, lastAppliedIndex);
+        commitIndexCondition.signalAll();
+    }
+
+    // in lock
+    private long packEntries(long nextIndex, StoreProto.AppendEntriesRequest.Builder requestBuilder) {
+        long lastIndex = Math.min(raftLog.getLastLogIndex(),
+                nextIndex + raftOptions.getMaxLogEntriesPerRequest() - 1);
+        for (long index = nextIndex; index <= lastIndex; index++) {
+            StoreProto.LogEntry entry = raftLog.getEntry(index);
+            requestBuilder.addEntries(entry);
+        }
+        return lastIndex - nextIndex + 1;
+    }
+
+    private boolean installSnapshot(RaftPeer peer) {
+        return true;
     }
 
     private class PreVoteResponseCallback implements RpcCallback<StoreProto.VoteResponse> {
@@ -466,5 +651,37 @@ public class RaftNode {
 
     public void setVotedFor(int votedFor) {
         this.votedFor = votedFor;
+    }
+
+    public int getLeaderId() {
+        return leaderId;
+    }
+
+    public void setLeaderId(int leaderId) {
+        this.leaderId = leaderId;
+    }
+
+    public long getCommitIndex() {
+        return commitIndex;
+    }
+
+    public void setCommitIndex(long commitIndex) {
+        this.commitIndex = commitIndex;
+    }
+
+    public long getLastAppliedIndex() {
+        return lastAppliedIndex;
+    }
+
+    public void setLastAppliedIndex(long lastAppliedIndex) {
+        this.lastAppliedIndex = lastAppliedIndex;
+    }
+
+    public RaftStateMachine getStateMachine() {
+        return stateMachine;
+    }
+
+    public void setStateMachine(RaftStateMachine stateMachine) {
+        this.stateMachine = stateMachine;
     }
 }

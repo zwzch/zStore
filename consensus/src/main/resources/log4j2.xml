@@ -4,7 +4,7 @@
 -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
      to make all loggers asynchronous. -->
 
-<Configuration status="INFO">
+<Configuration status="DEBUG">
     <Appenders>
 
         <Console name="Console" target="SYSTEM_OUT">
@@ -14,7 +14,7 @@
         <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
         <RollingFile name="RollingFile" fileName="logs/raft_example.log" immediateFlush="false"
                      bufferSize="65536"
-                     filePattern="logs/raft.log.%d{yyyy-MM-dd}" append="true">
+                     filePattern="logs/zstore.log.%d{yyyy-MM-dd}" append="true">
             <PatternLayout>
                 <Pattern>%d %p [%t]\t%m%n</Pattern>
             </PatternLayout>

@@ -14,6 +14,9 @@ public class RaftPeer {
     private volatile boolean isCatchUp;
     private volatile Boolean voteGranted;
     private RaftConsensusServiceAsync raftConsensusServiceAsync;
+    // 已复制日志的最高索引值
+    private long matchIndex;
+
     public RaftPeer(StoreProto.Server server) {
         this.server = server;
         this.rpcClient = new RpcClient(new Endpoint(
@@ -44,6 +47,23 @@ public class RaftPeer {
         return raftConsensusServiceAsync;
     }
 
+    public long getMatchIndex() {
+        return matchIndex;
+    }
+
+    public void setMatchIndex(long matchIndex) {
+        this.matchIndex = matchIndex;
+    }
+
+    public RpcClient getRpcClient() {
+        return rpcClient;
+    }
+
+    public void setRpcClient(RpcClient rpcClient) {
+        this.rpcClient = rpcClient;
+    }
+
+
     public void setRaftConsensusServiceAsync(RaftConsensusServiceAsync raftConsensusServiceAsync) {
         this.raftConsensusServiceAsync = raftConsensusServiceAsync;
     }
@@ -54,5 +74,13 @@ public class RaftPeer {
 
     public void setServer(StoreProto.Server server) {
         this.server = server;
+    }
+
+    public boolean isCatchUp() {
+        return isCatchUp;
+    }
+
+    public void setCatchUp(boolean catchUp) {
+        isCatchUp = catchUp;
     }
 }

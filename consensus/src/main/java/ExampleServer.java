@@ -11,12 +11,17 @@ import java.util.List;
 
 public class ExampleServer {
     public static void main(String[] args) {
+//        String sequence = args[0];
         String datadir = "./data";
-        String serverStr = "127.0.0.1:8051:1,127.0.0.1:8052:2,127.0.0.1:8053:3";
+        String serverStr = "127.0.0.1:8051:1,127.0.0.1:8052:2";
         String localServerStr1 = "127.0.0.1:8051:1";
         String localServerStr2 = "127.0.0.1:8052:2";
         String localServerStr3 = "127.0.0.1:8053:3";
-        String localServerStr = localServerStr3;
+//        ArrayList<String> list = new ArrayList<>();
+//        list.add(localServerStr1);
+//        list.add(localServerStr2);
+//        String localServerStr = list.get(Integer.valueOf(sequence));
+        String localServerStr = localServerStr2;
         String[] arr = localServerStr.split(":");
         datadir += arr[arr.length-1];
         String[] splitArray = serverStr.split(",");

@@ -8,7 +8,7 @@ public interface RaftConsensusService {
 
     StoreProto.VoteResponse requestVote(StoreProto.VoteRequest request);
 
-//    StoreProto.AppendEntriesResponse appendEntries(StoreProto.AppendEntriesRequest request);
+    StoreProto.AppendEntriesResponse appendEntries(StoreProto.AppendEntriesRequest request);
 //
 //    StoreProto.InstallSnapshotResponse installSnapshot(StoreProto.InstallSnapshotRequest request);
 }

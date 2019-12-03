@@ -55,6 +55,6 @@ public class RaftOptions {
     /**
      * raft的log和snapshot父目录，绝对路径
      * */
-    private String dataDir = System.getProperty("com.github.wenweihu86.raft.data.dir");
+    private String dataDir = System.getProperty("com.zstore.consensus.raft.data.dir");
 
 }
