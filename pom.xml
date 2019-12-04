@@ -21,7 +21,9 @@
         </plugins>
     </build>
     <modules>
-        <module>consensus</module>
+        <module>zstore-consensus</module>
+        <module>test</module>
+        <module>zstore-api</module>
     </modules>
 
 
