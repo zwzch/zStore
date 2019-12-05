@@ -24,6 +24,7 @@
         <module>zstore-consensus</module>
         <module>test</module>
         <module>zstore-api</module>
+        <module>zstore-storge</module>
     </modules>
 
 
